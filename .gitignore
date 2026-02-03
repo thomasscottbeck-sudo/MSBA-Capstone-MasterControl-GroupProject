@@ -21,5 +21,7 @@ Custom GPT Uploads/
 .claude/
 # Custom local ignore folder
 .gitignore_folder/
-
+.vscode/
+.quarto/
+.claude/
 **/*.quarto_ipynb
