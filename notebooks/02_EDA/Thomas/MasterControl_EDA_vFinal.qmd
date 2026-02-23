@@ -1541,9 +1541,9 @@ display(Markdown(
 
 | Member | Contributions |
 |---|---|
-| **Thomas Beck** | Data preparation and feature engineering pipeline; conversion gap analysis; velocity and recycled lead analysis; title keyword signal analysis; seniority x industry x model segment interactions; scope lift analysis; results synthesis; notebook structure and compilation |
-| **Max Ridgeway** | Data schema description and variable documentation; exploratory analysis of account-level variables including territory, tier, and industry distributions |
-| **Astha KC** | Business problem framing and introduction; missing data analysis and imputation strategy; guiding questions formulation |
+| **Thomas Beck** | Data preparation and feature engineering pipeline (Section 3); conversion gap analysis (Section 4); lead priority, channel, territory, and cohort trend analysis (Section 5); velocity and recycled lead analysis (Section 6); title keyword analysis, segment interactions, and scope lift (Section 7); executive summary; results synthesis; notebook structure and compilation |
+| **Max Ridgeway** | Data schema description and variable documentation (Section 2.1); territory and industry distribution analysis (Section 5.3) |
+| **Astha KC** | Business problem framing and introduction (Section 1); missing data analysis (Section 2.2); guiding questions formulation (Section 1.1) |
 
 ---
 
