@@ -55,11 +55,40 @@ editor_options:
 #| include: false
 
 # -----------------------------------------------------------------------------
-# Core imports and global configuration
+# Auto-install missing packages so the notebook runs in any fresh environment
 # -----------------------------------------------------------------------------
 
 import subprocess
 import sys
+
+def install_if_missing(package_name, import_name=None, pip_name=None):
+    """Install a package if not already available in the environment."""
+    import_name = import_name or package_name.lower()
+    pip_name = pip_name or import_name
+    try:
+        __import__(import_name)
+    except ImportError:
+        subprocess.check_call(
+            [sys.executable, "-m", "pip", "install", pip_name, "-q"],
+            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
+        )
+
+for pkg in [
+    ("pandas", None, None),
+    ("numpy", None, None),
+    ("matplotlib", None, None),
+    ("seaborn", None, None),
+    ("scipy", None, None),
+    ("scikit-learn", "sklearn", "scikit-learn"),
+    ("pyprojroot", None, None),
+    ("tabulate", None, None),
+]:
+    install_if_missing(*pkg)
+
+# -----------------------------------------------------------------------------
+# Core imports and global configuration
+# -----------------------------------------------------------------------------
+
 import warnings
 import re
 import pandas as pd
@@ -81,23 +110,8 @@ np.random.seed(42)
 #| include: false
 
 # -----------------------------------------------------------------------------
-# Install any missing packages at runtime
+# Additional imports (installed by setup cell above)
 # -----------------------------------------------------------------------------
-
-def install_if_missing(package_name, import_name=None, pip_name=None):
-    """Install a package if not already available in the environment."""
-    import_name = import_name or package_name.lower()
-    pip_name = pip_name or import_name
-    try:
-        __import__(import_name)
-    except ImportError:
-        subprocess.check_call(
-            [sys.executable, "-m", "pip", "install", pip_name, "-q"],
-            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
-        )
-
-for pkg in [("pyprojroot", None, None), ("tabulate", None, None)]:
-    install_if_missing(*pkg)
 
 from pyprojroot import here
 from tabulate import tabulate
