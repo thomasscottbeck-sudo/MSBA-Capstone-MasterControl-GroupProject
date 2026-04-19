@@ -63,7 +63,7 @@ I did the technical build. Specifically:
 - EDA notebook in full: funnel analysis, conversion gap, channel breakdown, seniority × function heatmap, feature distributions
 - Notebook compilation, versioning, and final write-up
 
-52 commits on `main`, full history in the repo. Teammates contributed channel segmentation commentary, calibration sanity checks, and sponsor Q&A.
+52 commits on `main`, full history in the repo. Max handled sponsor liaison and business validation of the feature logic. Astha built the final sponsor deck and owned the delivery narrative.
 
 ---
 

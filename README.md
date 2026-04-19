@@ -84,6 +84,6 @@ Five gradient boosting models tuned via randomized search with 5-fold stratified
 
 | Member | Contribution |
 |--------|-------------|
-| **Thomas Beck** | Feature engineering, model training and selection, ensemble methods, SHAP analysis, EDA, notebook compilation |
-| **Max Ridgeway** | Channel and industry segmentation, business validation |
-| **Astha KC** | Calibration analysis, sponsor Q&A, documentation |
+| **Thomas Beck** | Modeling pipeline, feature engineering, ensembles, SHAP analysis, EDA |
+| **Max Ridgeway** | Sponsor liaison, business validation of feature logic, domain review |
+| **Astha KC** | Final sponsor presentation and delivery, calibration checks, Q&A |
