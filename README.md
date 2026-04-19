@@ -1,20 +1,15 @@
-<div align="center" markdown="1">
-
-# MasterControl: QAL Lead Scoring & Conversion Optimization
-
-**MSBA IS 6813 Capstone &nbsp;|&nbsp; University of Utah &nbsp;|&nbsp; Spring 2026**
-
-[![AUC-ROC](https://img.shields.io/badge/AUC--ROC-0.9147-00534B?style=flat-square)](notebooks/03_Modeling/Thomas/mastercontrol_model_v13.qmd)
-[![Top Decile](https://img.shields.io/badge/Top%20Decile%20Conv.-77.5%25-2980b9?style=flat-square)](notebooks/03_Modeling/Thomas/mastercontrol_model_v13.qmd)
-[![Baseline](https://img.shields.io/badge/Baseline%20Conv.-17.9%25-95a5a6?style=flat-square)](notebooks/02_EDA/Thomas/MasterControl_EDA_vFinal.qmd)
-[![Python](https://img.shields.io/badge/Python-3.11-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
-[![Quarto](https://img.shields.io/badge/Quarto-Polyglot-75AADB?style=flat-square)](https://quarto.org/)
-
-**Thomas Beck &nbsp;·&nbsp; Max Ridgeway &nbsp;·&nbsp; Astha KC**
-
+<div class="hero" align="center">
+  <h1>MasterControl: QAL Lead Scoring &amp; Conversion Optimization</h1>
+  <div class="meta"><strong>MSBA IS 6813 Capstone &nbsp;|&nbsp; University of Utah &nbsp;|&nbsp; Spring 2026</strong></div>
+  <div class="badges">
+    <a href="notebooks/03_Modeling/Thomas/mastercontrol_model_v13.qmd"><img src="https://img.shields.io/badge/AUC--ROC-0.9147-00534B?style=flat-square" alt="AUC-ROC"></a>
+    <a href="notebooks/03_Modeling/Thomas/mastercontrol_model_v13.qmd"><img src="https://img.shields.io/badge/Top%20Decile%20Conv.-77.5%25-2980b9?style=flat-square" alt="Top Decile"></a>
+    <a href="notebooks/02_EDA/Thomas/MasterControl_EDA_vFinal.qmd"><img src="https://img.shields.io/badge/Baseline%20Conv.-17.9%25-95a5a6?style=flat-square" alt="Baseline"></a>
+    <a href="https://www.python.org/"><img src="https://img.shields.io/badge/Python-3.11-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
+    <a href="https://quarto.org/"><img src="https://img.shields.io/badge/Quarto-Polyglot-75AADB?style=flat-square" alt="Quarto"></a>
+  </div>
+  <div class="authors">Thomas Beck &nbsp;·&nbsp; Max Ridgeway &nbsp;·&nbsp; Astha KC</div>
 </div>
-
----
 
 ## The Problem
 
@@ -45,14 +40,10 @@ Recycled leads make up the majority of the pipeline by volume and convert at rou
 
 ## What the Data Shows
 
-<div align="center" markdown="1">
-
 | | |
 |:---:|:---:|
 | ![SHAP Feature Importance](output/shap_importance.png) | ![Channel Conversion by Tier](output/channel_tier_conversion.png) |
 | **Top SHAP predictors (VotingEnsemble)** | **Conversion rate by channel tier** |
-
-</div>
 
 **Seniority × Function conversion rates (from EDA):**
 
