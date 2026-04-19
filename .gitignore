@@ -3,6 +3,10 @@
 data/*.csv
 data/*.xlsx
 data/*.zip
+output/*.csv
+output/*.xlsx
+**/Archive/*.csv
+**/Archive/*.xlsx
 
 # 2. Ignore R/Quarto Cache & System Files
 .Rproj.user

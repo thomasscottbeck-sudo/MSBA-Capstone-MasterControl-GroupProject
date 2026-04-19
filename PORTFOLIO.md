@@ -5,102 +5,113 @@
 
 ## Business Problem
 
-MasterControl sells quality management software to regulated industries through two product lines: Mx (manufacturing execution) and Qx (quality management). Leads enter the pipeline as Qualified Activity Leads (QALs) and progress toward SQL, SQO, or Won status.
+MasterControl sells quality management software through two product lines: Mx (manufacturing execution) and Qx (quality management). Leads enter as QALs and progress to SQL, SQO, or Won.
 
-The company's conversion rates diverge significantly by product: Mx converts at roughly 12.7% while Qx converts at 19.7%. With a $50 cost per outbound sales call and $6,000 value per SQL conversion, the ability to identify which leads are most likely to convert is a direct revenue lever. The current approach works the pipeline uniformly, which means high-value leads get no more attention than low-value ones.
+Mx converts at 12.6%, Qx at 19.7%. Overall baseline is 17.9%. At $50 per SDR call, uniform pipeline coverage is expensive and leaves the highest-intent leads getting the same attention as the lowest.
 
-**Project objective:** Build a lead scoring model that ranks incoming QALs by conversion probability, enabling the sales team to prioritize effort toward the highest-value opportunities.
+**Objective:** rank every incoming QAL by conversion probability so the sales team can allocate effort toward the leads most likely to close.
 
 ---
 
 ## Our Solution
 
-We built a binary classification model on 16,816 QAL records from MasterControl's Salesforce CRM. The target variable is whether a lead converts to SQL or beyond (approximately 15% positive class). Because accuracy is meaningless with 85/15 class imbalance, we optimized for AUC-ROC.
+Binary classification on 16,816 QAL records from Salesforce CRM. Positive class is 17.9%, so accuracy is meaningless. Primary metric is AUC-ROC.
 
-The solution has three components:
+Three components:
 
-**1. Feature Engineering**
+**1. Feature engineering.** Raw CRM fields (industry, title, channel, tier, territory) are thin signal on their own. I built six domain features that encode business logic:
 
-Raw CRM fields (industry, title, channel, account tier, territory) have limited predictive power on their own. I designed six domain-informed engineered features that encode business logic:
+- *Intent Strength.* Composite of channel type and priority label.
+- *Channel Efficiency Tier.* Premium / Standard / Low-Value grouping by historical conversion.
+- *Hidden Gem Flag.* High-fit accounts arriving via low-touch channels.
+- *Capital Density.* Industry-level budget proxy (Pharma/Biotech vs. general mfg).
+- *Role-Product Match.* Title-to-product-line fit, scored continuously.
+- *Title NLP.* TF-IDF reduced to 20 LSA components.
 
-- *Intent Strength:* Composite score from channel type and priority label, mapping each combination to a calibrated conversion signal
-- *Channel Efficiency Tier:* Categorical grouping of channels by historical conversion rate (Premium, Standard, Low-Value) derived from the data
-- *Hidden Gem Flag:* Binary flag identifying accounts in high-fit industry segments that arrive via low-touch channels (underserved by the current sales motion)
-- *Capital Density Score:* Continuous industry-level proxy for budget availability, distinguishing pharma/biotech from general manufacturing
-- *Role-Product Match:* Continuous score mapping contact titles to product line fit based on domain knowledge of who buys Mx vs. Qx
-- *Title NLP:* TF-IDF on contact titles reduced to 20 LSA components, capturing title signal beyond simple keyword matching
+Plus ordinal seniority encoding, temporal decay, and seniority × decision-relevance interactions.
 
-Additional features: ordinal seniority encoding, temporal decay (recency-weighted cohort signal), seniority-by-decision-relevance interaction, and industry-channel synergy terms.
+**2. Model tournament.** Five gradient boosting models (CatBoost, LightGBM, XGBoost, Gradient Boosting, Random Forest) plus a logistic regression benchmark. Randomized search, 5-fold stratified CV, SMOTE inside the pipeline. Top performers combined into a stacking ensemble (LightGBM meta-learner) and a soft-voting ensemble.
 
-**2. Model Tournament**
+**3. Explainability.** SHAP TreeExplainer on the voting ensemble. The sales team sees the reason each lead is scored, not just the score.
 
-Five gradient boosting models (CatBoost, LightGBM, XGBoost, Gradient Boosting, Random Forest) plus a logistic regression benchmark, each tuned via randomized search (100-150 iterations, 5-fold stratified CV). SMOTE oversampling applied inside each CV fold via `imblearn.Pipeline` to prevent synthetic-sample leakage across folds — an important methodological detail that earlier versions got wrong.
+---
 
-Top performers combined into a stacking ensemble (LightGBM meta-learner) and a soft-voting ensemble. Champion selected based on validation AUC, with generalization gap (train vs. test AUC) as a secondary criterion.
+## Results
 
-**3. Profit Curve**
+| Metric | Value |
+|--------|------|
+| Test AUC-ROC | **0.9147** |
+| Top decile conversion | **77.5%** |
+| Baseline conversion | 17.9% |
+| Top decile lift vs. baseline | **4.3x** |
+| Champion model | VotingEnsemble |
+| Generalization gap | Within acceptable bounds (train vs. held-out test AUC) |
 
-Predicted probabilities translated into a dollar-denominated profit curve ($50/call cost, $6,000/SQL value), identifying the exact score threshold that maximizes cumulative profit. This converts a statistical result into an operational recommendation the sales team can act on directly.
+Top SHAP predictors: intent_strength, industry × model interaction, account primary site function, manufacturing model, territory rollup, channel tier, lead age decay.
 
 ---
 
 ## My Contribution
 
-I was the primary contributor to this project's technical work. Specifically, I built:
+I did the technical build. Specifically:
 
-- The full feature engineering pipeline (all six engineered features plus interactions and temporal features)
-- The modeling infrastructure: preprocessing pipeline, CV framework, SMOTE-inside-CV implementation, randomized hyperparameter search for all five candidate models
-- The ensemble methods: stacking with LightGBM meta-learner and soft-voting ensemble
-- SHAP explainability analysis using TreeExplainer
-- The profit curve and business impact analysis
-- The EDA notebook: funnel analysis, channel breakdown, seniority-function heatmap, feature distributions, conversion gap analysis
-- All notebook versions from v1 through v13 (52 commits, full git history in the group repo)
+- All six engineered features plus temporal and interaction terms
+- Preprocessing pipeline, CV framework, SMOTE-inside-Pipeline implementation
+- Randomized hyperparameter search across all five candidates
+- Stacking ensemble and soft-voting ensemble
+- SHAP analysis
+- EDA notebook in full: funnel analysis, conversion gap, channel breakdown, seniority × function heatmap, feature distributions
+- Notebook compilation, versioning, and final write-up
+
+52 commits on `main`, full history in the repo. Teammates contributed channel segmentation commentary, calibration sanity checks, and sponsor Q&A.
 
 ---
 
 ## Business Value
 
-The model demonstrates that contacting only the top-scored leads captures the majority of conversions at a fraction of the call volume. The profit curve shows a clear optimal threshold where incremental calls stop generating positive return.
+Contacting the top-scored decile captures the majority of conversions at a fraction of the call volume. The model lets the sales team stop treating every QAL the same and route based on evidence.
 
-Concrete recommendations that fall directly out of the analysis:
+Concrete moves that fall out of the analysis:
 
-- Route high-probability leads (top decile) to closers immediately
-- Deprioritize External Demand Gen and Email channels — both show poor conversion economics relative to cost
-- Differentiate P1 intent: "Contact Us" is a strong signal and should go to senior reps; "Webinar" is weak and should enter nurture
-- Target outbound prospecting toward Directors and VPs in Pharma & BioTech — this segment converts at a substantial multiple of the overall baseline
-- Flag hidden gem accounts for dedicated outreach
+- Score and tier every incoming QAL before SDR assignment
+- Deprioritize External Demand Gen and Email, both of which show poor conversion economics
+- Differentiate P1 intent: "Contact Us" to closers, "Webinar" to nurture
+- Target Pharma & Biotech Directors and VPs, the highest-converting segment
+- Flag hidden-gem accounts (high fit, low touch) for dedicated outreach
 
 ---
 
 ## Difficulties
 
-**Class imbalance.** At 85/15, a naive classifier achieves 85% accuracy by predicting "no conversion" for every lead. Standard accuracy metrics are misleading. We used AUC-ROC as the primary metric and SMOTE to address class imbalance during training.
+**Sponsor pushback on the profit curve.** Early versions of the model output leaned hard on a dollar-denominated profit curve using $50/call and $6,000/SQL as fixed economics. When we presented to MasterControl, they pushed back. The unit economics were not that clean in practice, and a "max profit" figure computed on a test-set slice does not translate to annual revenue. I kept the score ranking and the top-decile framing, which are defensible, and dropped the dollar claims from the sponsor-facing narrative. Lesson: if you don't have verified unit economics from the sponsor, don't build them into the headline.
 
-**SMOTE leakage.** Early model versions applied SMOTE before cross-validation, which inflated CV scores by exposing the model to synthetic samples derived from the validation fold. Moving SMOTE inside the CV loop via `imblearn.Pipeline` corrected this and produced more honest generalization estimates. This was a meaningful methodological error that required rebuilding the training pipeline.
+**Class imbalance at 82/18.** A null model predicting "no conversion" hits 82% accuracy and zero business value. Switched the North Star to AUC-ROC early and used SMOTE for training-time balance.
 
-**Feature sparsity in CRM data.** Many records had missing or sentinel values in key fields (manufacturing model "Unknown," territory "Other," account tier gaps). Imputation choices had downstream effects on feature quality. Extensive exploratory analysis was required to distinguish true nulls from informative missingness.
+**SMOTE leakage.** Early notebook versions applied SMOTE before the CV split, which inflated CV scores by exposing the model to synthetic samples derived from the validation fold. Moving SMOTE inside the `imblearn.Pipeline` fixed it and tightened the generalization gap. Small implementation detail with a meaningful impact on honesty of the estimates.
 
-**Sparse title data.** Contact titles vary widely in format and specificity. Parsing seniority (C-suite, VP, Director, Manager, Individual Contributor) from free-text required a multi-pass regex approach, and role-product matching required manual domain knowledge mapping rather than a clean categorical field.
+**Feature sparsity.** "Unknown" manufacturing model, "Other" territory, gaps in tier rollup. Distinguishing true nulls from informative missingness took several passes. Ended up treating several sentinel values as their own category rather than imputing, which captured signal that imputation would have erased.
+
+**Free-text titles.** Parsing seniority from raw title strings required multi-pass regex. Role-to-product mapping was manual domain knowledge, not a clean field. Title NLP helped but didn't eliminate the need for structure.
 
 ---
 
 ## What I Learned
 
-**Feature engineering matters more than model selection.** The ablation studies show that domain-informed features drive more AUC improvement than switching between gradient boosting implementations. All five candidate models performed within a narrow band once given the same feature set. The real lift came from encoding business logic.
+**Feature engineering beats model selection.** All five candidate models landed inside a narrow AUC band once given the same feature set. Domain-informed features drove the lift. This is the lesson I'll carry forward.
 
-**Methodological precision compounds.** The SMOTE leakage issue is a good example: a seemingly minor implementation detail (where in the pipeline SMOTE runs) produced meaningfully different and more honest model estimates. Getting this right required understanding the CV data flow precisely.
+**Methodological honesty compounds.** The SMOTE-before-CV mistake produced a model that looked better than it was. Once corrected, the CV and validation AUC converged and I trusted the numbers. Shortcuts on methodology always show up in the generalization gap.
 
-**Ensembles provide marginal but consistent improvement.** Stacking and voting ensembles added a small AUC increment over the best individual model. Whether that justifies added deployment complexity depends on the use case — for this project, a single CatBoost or LightGBM model is easier to explain to a non-technical sponsor.
+**Sponsor trust beats technical polish.** The profit curve was technically correct and operationally useless because we didn't have verified inputs. The SHAP analysis and seniority × function heatmap were less flashy and more useful because they pointed at specific segments the sales team could act on. When the sponsor pushes back, the thing they're pushing back on is usually the thing you made up.
 
-**Profit curves are more useful than AUC for business audiences.** AUC tells you the model can rank leads; a profit curve tells you how many leads to call and what the dollar outcome looks like. Translating statistical metrics into operational terms was the most important communication step.
+**Ensembles add marginal AUC.** Stacking and soft voting added a small increment over the best single model. Whether it's worth the deployment complexity depends on the stakes. For this project, a single CatBoost or LightGBM would ship faster and be easier to explain.
 
 ---
 
 ## Notebooks
 
-| Notebook | Description |
-|----------|-------------|
-| [`MasterControl_EDA_vFinal.qmd`](notebooks/02_EDA/Thomas/MasterControl_EDA_vFinal.qmd) | Exploratory data analysis: funnel structure, channel efficiency, seniority heatmap, conversion gap analysis, feature distributions (1,564 lines) |
-| [`mastercontrol_model_v13.qmd`](notebooks/03_Modeling/Thomas/mastercontrol_model_v13.qmd) | Full modeling pipeline: feature engineering, preprocessing, model tournament, ensembles, SHAP, profit curve, sponsor Q&A validation (3,201 lines) |
+| Notebook | Contents |
+|----------|----------|
+| [`MasterControl_EDA_vFinal.qmd`](notebooks/02_EDA/Thomas/MasterControl_EDA_vFinal.qmd) | Funnel analysis, conversion gap, channel breakdown, seniority × function heatmap, feature distributions. 1,564 lines. |
+| [`mastercontrol_model_v13.qmd`](notebooks/03_Modeling/Thomas/mastercontrol_model_v13.qmd) | Full pipeline: feature engineering, preprocessing, model tournament, ensembles, SHAP, score distribution, sponsor Q&A validation. 3,201 lines. |
 
-Both notebooks are self-contained and reproducible. All dependencies auto-install on first run. Data not included per course requirements.
+Both notebooks are self-contained. Dependencies auto-install. Raw data not included per course requirements.

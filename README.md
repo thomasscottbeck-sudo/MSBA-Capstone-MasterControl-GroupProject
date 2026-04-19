@@ -1,162 +1,98 @@
-﻿# 📊 MSBA Capstone - Group Project Dashboard
-**MSBA IS 6813 | Spring 2026**
+<div align="center">
 
-[![Project Status](https://img.shields.io/badge/Status-Active-success?style=flat-square)]()
-[![Engine](https://img.shields.io/badge/Engine-Quarto%20(Polyglot)-blue?style=flat-square)]()
-[![Deploy](https://img.shields.io/badge/Deploy-GitHub%20Pages-orange?style=flat-square)]()
+# MasterControl: QAL Lead Scoring & Conversion Optimization
 
----
+**MSBA IS 6813 Capstone &nbsp;|&nbsp; University of Utah &nbsp;|&nbsp; Spring 2026**
 
-## 🛠️ Functional Hub & Assignments
+[![AUC-ROC](https://img.shields.io/badge/AUC--ROC-0.9147-00534B?style=flat-square)](notebooks/03_Modeling/Thomas/mastercontrol_model_v13.qmd)
+[![Top Decile](https://img.shields.io/badge/Top%20Decile%20Conv.-77.5%25-2980b9?style=flat-square)](notebooks/03_Modeling/Thomas/mastercontrol_model_v13.qmd)
+[![Baseline](https://img.shields.io/badge/Baseline%20Conv.-17.9%25-95a5a6?style=flat-square)](notebooks/02_EDA/Thomas/MasterControl_EDA_vFinal.qmd)
+[![Python](https://img.shields.io/badge/Python-3.11-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
+[![Quarto](https://img.shields.io/badge/Quarto-Polyglot-75AADB?style=flat-square)](https://quarto.org/)
 
-| **Core Tools** 🛠️ | [📋 Specs](./docs/Assignments.md) | [📊 Data Room](./data/) | [📁 Shared Google Drive](https://drive.google.com/drive/u/0/folders/1QzSqJZNh6-H4rR257ahe6yhg6PFPd7X7) | [🌐 Group Dashboard](https://thomasscottbeck-sudo.github.io/MSBA-Capstone-MasterControl-GroupProject/) | [💻 GitHub Repo](https://github.com/thomasscottbeck-sudo/MSBA-Capstone-MasterControl-GroupProject) |
-| :--- | :---: | :---: | :---: | :---: | :---: |
-| **Assignments** 📂 | [📄 01 Business Problem Statement](https://docs.google.com/document/d/1hEoEOz1e5vL9a94Nr8O9mCShlzDes7FidaHFJYPHH94/edit?usp=drive_link) | [📂 02 EDA](./notebooks/02_EDA/) | [📂 03 Modeling](./notebooks/03_Modeling/) | [📂 04 Presentation](./notebooks/04_Presentation/) | 🚫 |
+**Thomas Beck &nbsp;·&nbsp; Max Ridgeway &nbsp;·&nbsp; Astha KC**
 
----
-
-## 📅 Deadlines
-
-| Phase | Milestone | Hard Deadline |
-| :---: | :--- | :--- |
-| 🟢 | **Business Problem Statement** | **Jan 28** |
-| 🟡 | **EDA Group Notebook** | **Feb 18** |
-| ⚪ | **Modeling Notebook** | **Mar 18** |
-| ⚪ | **Practice Presentation** | **Apr 05** |
-| ⚪ | **Final Sponsor Delivery** | **Apr 08/15** |
-| ⚪ | **Portfolio & Peer Eval** | **Apr 19** |
+</div>
 
 ---
 
-## ⚙️ Notebook tips
+## The Problem
 
-### 1. Notebook Standards & The "Golden" YAML
-**Primary Directive:** Copy this block **exactly** into the top of every `.qmd` file.
-
-```yaml
----
-title: 
-subtitle: 
-date: "Spring 2026"
-format:
-  html:
-    theme: journal
-    toc: true
-    toc-depth: 3
-    toc-float: true
-    number-sections: false
-    code-fold: true
-    code-tools: true
-    df-print: paged
-    highlight-style: github
-  pdf:
-    documentclass: article
-    geometry:
-      - margin=1in
-    toc: true
-    number-sections: false
-    colorlinks: true
-    mainfont: "Arial"
-    sansfont: "Arial"
-    monofont: "Courier New"
-editor: visual
----
-```
-
-### 2. Standard Setup & Parallel Processing (Copy-Paste)
-**Rule:** Use these blocks to initialize your environment. They include **Dynamic Core Selection** to maximize performance on any machine without crashing it (N-1 logic).
-
-#### 🟢 R Setup (Tidyverse + Parallel)
-```r
-# Load Core Packages
-if (!require("pacman")) install.packages("pacman")
-pacman::p_load(tidyverse, here, parallel, doParallel)
-
-# Dynamic Parallel Processing (Detects your hardware)
-# Leaves 1 core free for the OS to prevent freezing
-num_cores <- parallel::detectCores(logical = FALSE)
-cl <- makeCluster(num_cores - 1)
-registerDoParallel(cl)
-
-print(paste("Cluster active with", num_cores - 1, "cores."))
-```
-
-#### 🔵 Python Setup (Pandas + Multiprocessing)
-```python
-import pandas as pd
-import numpy as np
-import multiprocessing
-from pyprojroot import here
-
-# Dynamic Core Selector
-# Use 'n_jobs' in Scikit-Learn models (e.g., n_jobs=n_jobs)
-n_jobs = multiprocessing.cpu_count() - 1
-
-print(f"Parallel processing enabled: {n_jobs} cores available.")
-```
-
-#### ⚡ Performance Note: Why Parallel Processing?
-Standard R and Python scripts run linearly on a **single CPU core**, leaving 80-90% of your computer's power idle. By enabling parallel processing (as shown above), we distribute computations across multiple cores simultaneously.
-* **Impact:** This is critical for resource-intensive tasks like Random Forest, XGBoost, or Grid Search.
-* **Result:** It can reduce model training time by **4x to 8x** depending on your hardware.
-
-### 3. Foolproof Data Loading (Polyglot Paths)
-Try not to use absolute paths (e.g., `C:/Users/Thomas/...`). 
-
-**For R (using `here`):**
-```r
-library(here)
-# Automatically finds the project root (where .git is)
-df <- read.csv(here::here("data", "application_train.csv"))
-```
-
-**For Python (using `pyprojroot`):**
-```python
-from pyprojroot import here
-# Automatically finds the project root
-path = here("data/application_train.csv")
-df = pd.read_csv(path)
-```
+MasterControl's SDRs work the QAL pipeline uniformly. Every lead gets the same attention regardless of how likely it is to convert. Mx converts at 12.6%, Qx at 19.7%, baseline 17.9%. The data contains clear signals that separate high-probability leads from low ones. The sales team is not using them.
 
 ---
 
-## 🧠 Repository Architecture & Usage Flow
-*Visual map of how files, data, and code interact within this repository.*
+## What We Recommend
 
-```text
-┌─────────────────┐       ┌────────────────────┐      ┌──────────────────┐
-│  📂 data/       │       │  📂 notebooks/     │      │  📂 output/      │
-│  (Local Only)   │──────▶│  (Code Execution)  │─────▶│  (Deliverables)  │
-│  Raw .csv Files │       │  .qmd Analysis     │      │  .csv / .png     │
-└─────────────────┘       └────────────────────┘      └──────────────────┘
-        │                           ▲
-        │                           │
-        └────── (Load via 'here') ──┘
-```
+Five actions that fall directly out of the analysis, ordered by confidence and ease of implementation.
 
-## 📂 Physical Directory Structure
-```text
-├── data/               # RAW data (Local only - Git ignored)
-├── notebooks/
-│   ├── 01_Business_Problem/
-│   ├── 02_EDA/
-│   ├── 03_Modeling/
-│   ├── 04_Presentation/
-│   └── individual/     # Individual "Sandboxes" for portfolio
-├── output/             # Exported .csv results and .png plots
-├── docs/               # Meeting notes and sponsor requirements
-└── README.md           # This Hub
-```
+**1. Score and tier every incoming QAL before SDR assignment.**
+The voting ensemble ranks leads with a test AUC of 0.9147. Top-decile leads convert at 77.5%, a 4.3x lift over the 17.9% baseline. Operationalizing this requires a scored export from the model into the CRM, nothing more.
+
+**2. Prioritize Pharma & Biotech accounts.**
+Industry and manufacturing model are the second and third strongest predictors in SHAP. Pharma and Biotech organizations convert higher across seniority levels because regulatory compliance creates non-discretionary demand. Concentrating SDR effort here compounds.
+
+**3. Engage senior contacts in Quality and Regulatory functions first.**
+Seniority matters, but function matters as much as level. C-suite Regulatory converts at 43%, C-suite R&D at 50%, C-suite Quality at 21%. VP Quality converts at 31%. "Unknown" title records convert at 11.8%, well below baseline. Cleaning and enriching title data is a no-model improvement available today.
+
+**4. Shift channel investment toward high-intent touchpoints.**
+Intent strength is the single most predictive feature in the model. Webinars, personalized demos, and direct executive outreach outperform organic and email channels by a wide margin. Low-value channels are not just underperforming. They are introducing noise into the pipeline.
+
+**5. Re-engage high-scoring recycled leads, filtered by score.**
+Recycled leads make up the majority of the pipeline by volume and convert at roughly 13% overall, lower than first-touch at 19%. But the model scores recycled and active leads on the same scale. High-scoring recycled contacts represent recoverable pipeline at no incremental sourcing cost. Blanket re-engagement is not the recommendation. Filtered re-engagement is.
 
 ---
 
-## 📞 Contact Information
+## What the Data Shows
 
-| Team Member | Email (Personal) | Email (University) | Phone |
-| :--- | :--- | :--- | :--- |
-| **Thomas Beck** | thomasscottbeck@gmail.com | u0399590@utah.edu | +1 (801) 631-2080 |
-| **Max Ridgeway** | [TBD] | u1230181@utah.edu | +1 (801) 597-3824 |
-| **Astha KC** | asthakc.us@gmail.com | u1561947@utah.edu | +1 (971) 500-6757 |
+<div align="center">
+
+| | |
+|:---:|:---:|
+| ![SHAP Feature Importance](output/shap_importance.png) | ![Channel Conversion by Tier](output/channel_tier_conversion.png) |
+| **Top SHAP predictors (VotingEnsemble)** | **Conversion rate by channel tier** |
+
+</div>
+
+**Seniority × Function conversion rates (from EDA):**
+
+| Function | C-Suite | VP | Director | Manager |
+|----------|---------|-----|----------|---------|
+| Quality | 21% | 31% | 24% | 27% |
+| Regulatory | 43% | 29% | 18% | 12% |
+| R&D | 50% | 25% | 17% | 30% |
+| PMO | 33% | . | 24% | 16% |
+| Mfg/Ops | 20% | . | 12% | 20% |
+
+VP and C-suite contacts in Regulatory and R&D are your highest-converting segments. Quality at VP (31%) is the most reliable high-volume opportunity.
 
 ---
-> **Note:** Before starting any work session, run `git pull` to sync the latest model changes from the team.
+
+## How the Model Works
+
+16,816 QAL records from Salesforce CRM. Binary target: SQL / SQO / Won vs. Recycled / Disqualified. Positive class 17.9%. Accuracy is meaningless at this imbalance, so the primary metric is AUC-ROC.
+
+Five gradient boosting models tuned via randomized search with 5-fold stratified cross-validation. SMOTE applied inside the CV pipeline, not before, to prevent synthetic-sample leakage across folds. Top candidates combined into a soft-voting ensemble. SHAP values explain each prediction in terms of the original features, so the sales team sees the reason, not just the score.
+
+**Champion model:** VotingEnsemble. Test AUC 0.9147.
+
+---
+
+## Analysis
+
+| Deliverable | Contents |
+|-------------|----------|
+| [EDA Notebook](notebooks/02_EDA/Thomas/MasterControl_EDA_vFinal.qmd) &nbsp;·&nbsp; [HTML](notebooks/02_EDA/Thomas/MasterControl_EDA_vFinal.html) | Funnel, conversion gap, channel breakdown, seniority × function heatmap |
+| [Modeling Notebook](notebooks/03_Modeling/Thomas/mastercontrol_model_v13.qmd) | Feature engineering, model tournament, SHAP, score distribution |
+
+> Raw data is not included in this repository.
+
+---
+
+## Team
+
+| Member | Contribution |
+|--------|-------------|
+| **Thomas Beck** | Feature engineering, model training and selection, ensemble methods, SHAP analysis, EDA, notebook compilation |
+| **Max Ridgeway** | Channel and industry segmentation, business validation |
+| **Astha KC** | Calibration analysis, sponsor Q&A, documentation |
