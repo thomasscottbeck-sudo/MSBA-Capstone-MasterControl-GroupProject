@@ -33,7 +33,7 @@ My individual portfolio version, oriented toward the rubric and a job-interview 
 |--------|-------------|
 | **Thomas Beck** | EDA, modeling pipeline, feature engineering, model tournament, ensembles, SHAP analysis |
 | **Max Ridgeway** | Ran the modeling notebook end-to-end, debugged the CatBoost wrapper, rewrote the SHAP block for reliable execution, added navigational TOC |
-| **Astha KC** | Built the final sponsor presentation and owned the delivery narrative; calibration sanity checks |
+| **Astha KC** | Built and delivered the final sponsor presentation. Final review and polish on all deliverable drafts, milestone checkpoints, calibration sanity checks, Q&A validation |
 
 ---
 
