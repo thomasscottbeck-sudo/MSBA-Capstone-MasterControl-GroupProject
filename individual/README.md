@@ -1,7 +1,12 @@
-# MasterControl: Lead Scoring & Conversion Optimization
-**Thomas Beck | MSBA IS 6813 Capstone | Spring 2026 | University of Utah**
-
----
+<div class="hero" align="center">
+  <h1>MasterControl: Lead Scoring &amp; Conversion Optimization</h1>
+  <div class="meta"><strong>Individual Portfolio &nbsp;|&nbsp; Thomas Beck &nbsp;|&nbsp; MSBA IS 6813 Capstone &nbsp;|&nbsp; Spring 2026</strong></div>
+  <div class="badges">
+    <a href="modeling/mastercontrol_model_v13.pdf"><img src="https://img.shields.io/badge/AUC--ROC-0.9147-00534B?style=flat-square" alt="AUC-ROC"></a>
+    <a href="modeling/mastercontrol_model_v13.pdf"><img src="https://img.shields.io/badge/Top%20Decile%20Conv.-77.5%25-2980b9?style=flat-square" alt="Top Decile"></a>
+    <a href="eda/MasterControl_EDA_vFinal.pdf"><img src="https://img.shields.io/badge/Baseline%20Conv.-17.9%25-95a5a6?style=flat-square" alt="Baseline"></a>
+  </div>
+</div>
 
 ## Business Problem
 
@@ -19,7 +24,7 @@ Binary classification on 16,816 QAL records from Salesforce CRM. Positive class 
 
 Three components:
 
-**1. Feature engineering.** Raw CRM fields (industry, title, channel, tier, territory) are thin signal on their own. I built six domain features that encode business logic:
+**1. Feature engineering.** Raw CRM fields (industry, title, channel, tier, territory) are thin signal on their own. Six domain features encode business logic:
 
 - *Intent Strength.* Composite of channel type and priority label.
 - *Channel Efficiency Tier.* Premium / Standard / Low-Value grouping by historical conversion.
@@ -45,7 +50,6 @@ Plus ordinal seniority encoding, temporal decay, and seniority × decision-relev
 | Baseline conversion | 17.9% |
 | Top decile lift vs. baseline | **4.3x** |
 | Champion model | VotingEnsemble |
-| Generalization gap | Within acceptable bounds (train vs. held-out test AUC) |
 
 Top SHAP predictors: intent_strength, industry × model interaction, account primary site function, manufacturing model, territory rollup, channel tier, lead age decay.
 
@@ -53,17 +57,15 @@ Top SHAP predictors: intent_strength, industry × model interaction, account pri
 
 ## My Contribution
 
-I did the technical build. Specifically:
+I did the technical build end to end.
 
-- All six engineered features plus temporal and interaction terms
-- Preprocessing pipeline, CV framework, SMOTE-inside-Pipeline implementation
-- Randomized hyperparameter search across all five candidates
-- Stacking ensemble and soft-voting ensemble
-- SHAP analysis
-- EDA notebook in full: funnel analysis, conversion gap, channel breakdown, seniority × function heatmap, feature distributions
-- Notebook compilation, versioning, and final write-up
+- **EDA:** the full `MasterControl_EDA_vFinal` notebook (1,564 lines). Funnel analysis, channel breakdown, seniority × function heatmap, conversion gap, feature distributions.
+- **Modeling:** feature engineering pipeline (all six engineered features plus temporal and interaction terms), preprocessing pipeline, CV framework, SMOTE-inside-Pipeline implementation, randomized hyperparameter search across all five candidate models.
+- **Ensembles:** stacking with LightGBM meta-learner and soft-voting ensemble.
+- **Explainability:** SHAP analysis with TreeExplainer.
+- **Notebook build:** compilation, versioning through v13, final write-up.
 
-52 commits on `main`, full history in the repo. Max handled sponsor liaison and business validation of the feature logic. Astha built the final sponsor deck and owned the delivery narrative.
+52 commits on `main`, full history in the repo. Max ran the modeling notebook end-to-end on his machine, debugged the CatBoost wrapper, and rewrote the SHAP block to run reliably. Astha built the final sponsor deck and owned the delivery narrative.
 
 ---
 
@@ -97,7 +99,7 @@ Concrete moves that fall out of the analysis:
 
 ## What I Learned
 
-**Feature engineering beats model selection.** All five candidate models landed inside a narrow AUC band once given the same feature set. Domain-informed features drove the lift. This is the lesson I'll carry forward.
+**Feature engineering beats model selection.** All five candidate models landed inside a narrow AUC band once given the same feature set. Domain-informed features drove the lift.
 
 **Methodological honesty compounds.** The SMOTE-before-CV mistake produced a model that looked better than it was. Once corrected, the CV and validation AUC converged and I trusted the numbers. Shortcuts on methodology always show up in the generalization gap.
 
@@ -111,7 +113,7 @@ Concrete moves that fall out of the analysis:
 
 | Notebook | Contents |
 |----------|----------|
-| [`MasterControl_EDA_vFinal.qmd`](notebooks/02_EDA/Thomas/MasterControl_EDA_vFinal.qmd) | Funnel analysis, conversion gap, channel breakdown, seniority × function heatmap, feature distributions. 1,564 lines. |
-| [`mastercontrol_model_v13.qmd`](notebooks/03_Modeling/Thomas/mastercontrol_model_v13.qmd) | Full pipeline: feature engineering, preprocessing, model tournament, ensembles, SHAP, score distribution, sponsor Q&A validation. 3,201 lines. |
+| [`MasterControl_EDA_vFinal`](eda/MasterControl_EDA_vFinal.pdf) | Funnel analysis, conversion gap, channel breakdown, seniority × function heatmap, feature distributions. 1,564 lines. |
+| [`mastercontrol_model_v13`](modeling/mastercontrol_model_v13.pdf) | Full pipeline: feature engineering, preprocessing, model tournament, ensembles, SHAP, score distribution, sponsor Q&A validation. 3,201 lines. |
 
 Both notebooks are self-contained. Dependencies auto-install. Raw data not included per course requirements.
