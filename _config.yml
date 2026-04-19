@@ -1,0 +1,15 @@
+title: "MasterControl Lead Scoring"
+description: "MSBA IS 6813 Capstone · Spring 2026 · University of Utah"
+theme: jekyll-theme-primer
+
+show_downloads: false
+
+kramdown:
+  parse_block_html: true
+  parse_span_html: true
+
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default

@@ -1,4 +1,4 @@
-<div align="center">
+<div align="center" markdown="1">
 
 # MasterControl: QAL Lead Scoring & Conversion Optimization
 
@@ -45,7 +45,7 @@ Recycled leads make up the majority of the pipeline by volume and convert at rou
 
 ## What the Data Shows
 
-<div align="center">
+<div align="center" markdown="1">
 
 | | |
 |:---:|:---:|
