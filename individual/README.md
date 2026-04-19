@@ -65,7 +65,7 @@ I did the technical build end to end.
 - **Explainability:** SHAP analysis with TreeExplainer.
 - **Notebook build:** compilation, versioning through v13, final write-up.
 
-52 commits on `main`, full history in the repo. Max ran the modeling notebook end-to-end on his machine, debugged the CatBoost wrapper, and rewrote the SHAP block to run reliably. Astha built and delivered the final sponsor presentation, ran final review on each deliverable draft, and kept us on milestone checkpoints.
+52 commits on `main`, full history in the repo. Max and Astha were heavily involved in ideation, brainstorming, and synthesis of modeling direction throughout the project. Max ran the modeling notebook end-to-end on his machine, debugged the CatBoost wrapper, and rewrote the SHAP block to run reliably. Astha built and delivered the final sponsor presentation, ran final review on each deliverable draft, and kept us on milestone checkpoints.
 
 ---
 

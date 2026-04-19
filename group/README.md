@@ -83,5 +83,5 @@ Both notebooks are available as `.qmd`, `.ipynb`, `.pdf`, and `.html` where appl
 | Member | Contribution |
 |--------|-------------|
 | **Thomas Beck** | EDA, modeling pipeline, feature engineering, model tournament, ensembles, SHAP analysis |
-| **Max Ridgeway** | Ran the modeling notebook end-to-end, debugged the CatBoost wrapper, rewrote the SHAP block for reliable execution, added navigational TOC |
-| **Astha KC** | Built and delivered the final sponsor presentation. Final review and polish on all deliverable drafts, milestone checkpoints, calibration sanity checks, Q&A validation |
+| **Max Ridgeway** | Heavily involved in ideation, brainstorming, and synthesis of modeling direction. Ran the modeling notebook end-to-end, debugged the CatBoost wrapper, rewrote the SHAP block for reliable execution, added navigational TOC |
+| **Astha KC** | Heavily involved in ideation, brainstorming, and synthesis of modeling direction. Built and delivered the final sponsor presentation. Final review and polish on all deliverable drafts, milestone checkpoints, calibration sanity checks, Q&A validation |
