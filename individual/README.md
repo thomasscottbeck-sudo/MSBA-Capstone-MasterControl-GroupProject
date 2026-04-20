@@ -126,7 +126,7 @@ The path from a first pass to the submitted v13 is worth seeing. Earlier iterati
 
 - **v7 – v10:** initial feature builds, first SMOTE attempts, pre-leak-fix CV
 - **v11 – v12:** SMOTE-inside-pipeline fix, expanded model tournament, first SHAP pass
-- **Overfit Check:** `04_Model_Validation_Suite.qmd` — generalization-gap audit
+- **Overfit Check:** `04_Model_Validation_Suite.qmd`, a generalization-gap audit
 - **v13 (final):** benchmark logistic, five-model tournament with 150-iteration randomized search, stacking + voting ensembles, ablation studies, sponsor Q&A validation
 
 EDA iterations are in [`archive/notebooks/02_EDA/Thomas/`](../archive/notebooks/02_EDA/Thomas/).
