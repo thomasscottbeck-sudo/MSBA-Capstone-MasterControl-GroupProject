@@ -37,6 +37,8 @@ Plus ordinal seniority encoding, temporal decay, and seniority × decision-relev
 
 **2. Model tournament.** Five gradient boosting models (CatBoost, LightGBM, XGBoost, Gradient Boosting, Random Forest) plus a logistic regression benchmark. Randomized search, 5-fold stratified CV, SMOTE inside the pipeline. Top performers combined into a stacking ensemble (LightGBM meta-learner) and a soft-voting ensemble.
 
+![Model tournament: CV vs validation AUC](assets/model_comparison.png)
+
 **3. Explainability.** SHAP TreeExplainer on the voting ensemble. The sales team sees the reason each lead is scored, not just the score.
 
 ---
@@ -50,6 +52,11 @@ Plus ordinal seniority encoding, temporal decay, and seniority × decision-relev
 | Baseline conversion | 17.9% |
 | Top decile lift vs. baseline | **4.3x** |
 | Champion model | VotingEnsemble |
+
+| | |
+|:---:|:---:|
+| ![SHAP feature importance](assets/shap_importance.png) | ![ROC curves, all models](assets/roc_curves.png) |
+| **SHAP importance, VotingEnsemble** | **ROC curves across candidate models** |
 
 Top SHAP predictors: intent_strength, industry × model interaction, account primary site function, manufacturing model, territory rollup, channel tier, lead age decay.
 
@@ -72,6 +79,10 @@ I did the technical build end to end.
 ## Business Value
 
 Contacting the top-scored decile captures the majority of conversions at a fraction of the call volume. The model lets the sales team stop treating every QAL the same and route based on evidence.
+
+![Conversion rate by score decile](assets/decile_conversion.png)
+
+The top decile converts at 77.5 percent against a 17.9 percent baseline, a 4.3x lift. Decile 1 is the buy list. The bottom four deciles are noise and should not be worked at current cost per call.
 
 Concrete moves that fall out of the analysis:
 
@@ -100,6 +111,10 @@ Concrete moves that fall out of the analysis:
 ## What I Learned
 
 **Feature engineering beats model selection.** All five candidate models landed inside a narrow AUC band once given the same feature set. Domain-informed features drove the lift.
+
+![Ablation heatmap](assets/ablation_heatmap.png)
+
+The ablation heatmap makes it visual. Removing any one engineered feature family drops AUC more than swapping CatBoost for XGBoost. The columns (models) move less than the rows (features).
 
 **Methodological honesty compounds.** The SMOTE-before-CV mistake produced a model that looked better than it was. Once corrected, the CV and validation AUC converged and I trusted the numbers. Shortcuts on methodology always show up in the generalization gap.
 
