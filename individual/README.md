@@ -64,7 +64,7 @@ Top SHAP predictors: intent_strength, industry × model interaction, account pri
 
 ## My Contribution
 
-I did the technical build end to end.
+I handled most of the modeling work on the project.
 
 - **EDA:** the full `MasterControl_EDA_vFinal` notebook (1,564 lines). Funnel analysis, channel breakdown, seniority × function heatmap, conversion gap, feature distributions.
 - **Modeling:** feature engineering pipeline (all six engineered features plus temporal and interaction terms), preprocessing pipeline, CV framework, SMOTE-inside-Pipeline implementation, randomized hyperparameter search across all five candidate models.
