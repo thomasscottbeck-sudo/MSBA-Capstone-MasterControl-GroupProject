@@ -2,8 +2,8 @@
   <h1>MasterControl: QAL Lead Scoring &amp; Conversion Optimization</h1>
   <div class="meta"><strong>Group Deliverable &nbsp;|&nbsp; MSBA IS 6813 Capstone &nbsp;|&nbsp; Spring 2026</strong></div>
   <div class="badges">
-    <a href="modeling/mastercontrol_model_v13-group.pdf"><img src="https://img.shields.io/badge/AUC--ROC-0.9147-00534B?style=flat-square" alt="AUC-ROC"></a>
-    <a href="modeling/mastercontrol_model_v13-group.pdf"><img src="https://img.shields.io/badge/Top%20Decile%20Conv.-77.5%25-2980b9?style=flat-square" alt="Top Decile"></a>
+    <a href="modeling/mastercontrol_model_vfinal.pdf"><img src="https://img.shields.io/badge/AUC--ROC-0.9147-00534B?style=flat-square" alt="AUC-ROC"></a>
+    <a href="modeling/mastercontrol_model_vfinal.pdf"><img src="https://img.shields.io/badge/Top%20Decile%20Conv.-77.5%25-2980b9?style=flat-square" alt="Top Decile"></a>
     <a href="eda/MasterControl_EDA_vFinal.pdf"><img src="https://img.shields.io/badge/Baseline%20Conv.-17.9%25-95a5a6?style=flat-square" alt="Baseline"></a>
   </div>
   <div class="authors">Thomas Beck &nbsp;·&nbsp; Max Ridgeway &nbsp;·&nbsp; Astha KC</div>
@@ -69,12 +69,14 @@ Five gradient boosting models tuned via randomized search with 5-fold stratified
 
 ## Deliverables
 
-| Notebook | Contents |
-|----------|----------|
-| [EDA (`MasterControl_EDA_vFinal`)](eda/MasterControl_EDA_vFinal.pdf) | Funnel analysis, conversion gap, channel breakdown, seniority × function heatmap |
-| [Modeling (`mastercontrol_model_v13-group`)](modeling/mastercontrol_model_v13-group.pdf) | Feature engineering, model tournament, SHAP explainability, score distribution |
+| Deliverable | Contents |
+|-------------|----------|
+| [Business Problem Statement](bps/MasterControl_Business_Problem_Statement.pdf) | Scoped business problem, objective, success criteria, analytic approach |
+| [EDA Notebook (`MasterControl_EDA_vFinal`)](eda/MasterControl_EDA_vFinal.pdf) | Funnel analysis, conversion gap, channel breakdown, seniority × function heatmap |
+| [Modeling Notebook (`mastercontrol_model_vfinal`)](modeling/mastercontrol_model_vfinal.pdf) | Feature engineering, model tournament, SHAP explainability, score distribution |
+| [Final Presentation](presentation/MasterControl_Final_Presentation.pdf) | Sponsor-facing deck delivered to MasterControl |
 
-Both notebooks are available as `.qmd`, `.ipynb`, `.pdf`, and `.html` where applicable. Raw data is not included.
+Notebooks available as `.qmd`, `.ipynb`, `.pdf`, and `.html` where applicable. Raw data not included.
 
 ---
 

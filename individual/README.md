@@ -109,11 +109,39 @@ Concrete moves that fall out of the analysis:
 
 ---
 
-## Notebooks
+## Deliverables
 
-| Notebook | Contents |
+| Artifact | Contents |
 |----------|----------|
-| [`MasterControl_EDA_vFinal`](eda/MasterControl_EDA_vFinal.pdf) | Funnel analysis, conversion gap, channel breakdown, seniority × function heatmap, feature distributions. 1,564 lines. |
+| [Business Problem Statement](bps/MasterControl_Business_Problem_Statement.pdf) | Graded Feb 1 submission. Scoping, objective, success criteria, analytic approach. |
+| [`MasterControl_EDA_vFinal`](eda/MasterControl_EDA_vFinal.pdf) | Funnel, conversion gap, channel breakdown, seniority × function heatmap, feature distributions. 1,564 lines. |
 | [`mastercontrol_model_v13`](modeling/mastercontrol_model_v13.pdf) | Full pipeline: feature engineering, preprocessing, model tournament, ensembles, SHAP, score distribution, sponsor Q&A validation. 3,201 lines. |
+| [Final Presentation](presentation/MasterControl_Final_Presentation.pdf) | Sponsor-facing deck delivered to MasterControl. |
 
-Both notebooks are self-contained. Dependencies auto-install. Raw data not included per course requirements.
+Notebooks are self-contained. Dependencies auto-install. Raw data not included per course requirements.
+
+### Version History
+
+The path from a first pass to the submitted v13 is worth seeing. Earlier iterations live in [`archive/notebooks/03_Modeling/Thomas/`](../archive/notebooks/03_Modeling/Thomas/):
+
+- **v7 – v10:** initial feature builds, first SMOTE attempts, pre-leak-fix CV
+- **v11 – v12:** SMOTE-inside-pipeline fix, expanded model tournament, first SHAP pass
+- **Overfit Check:** `04_Model_Validation_Suite.qmd` — generalization-gap audit
+- **v13 (final):** benchmark logistic, five-model tournament with 150-iteration randomized search, stacking + voting ensembles, ablation studies, sponsor Q&A validation
+
+EDA iterations are in [`archive/notebooks/02_EDA/Thomas/`](../archive/notebooks/02_EDA/Thomas/).
+
+### Key Sections in the Modeling Notebook
+
+Quick links into [`mastercontrol_model_v13.pdf`](modeling/mastercontrol_model_v13.pdf):
+
+1. Introduction + business problem
+2. Feature engineering (six domain features, decay, interactions)
+3. Data at a glance: target distribution, channel tier, seniority × function heatmap, feature distributions, correlation matrix
+4. Benchmark + model tournament
+5. Stacking and voting ensembles, ablation studies
+6. Test set evaluation: ROC, PR curves, calibration, confusion matrix
+7. SHAP explainability + dependence plots
+8. Profit analysis (kept for completeness; caveats in Difficulties above)
+9. Sponsor Q&A validation
+10. Results and conclusion
